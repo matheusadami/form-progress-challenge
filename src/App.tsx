@@ -8,33 +8,29 @@ interface Form {
   genre: string
 }
 
+const initialFormData: Form = {
+  name: '',
+  email: '',
+  maritalStatus: '',
+  genre: ''
+}
+
 export function App() {
-  const [formData, setFormData] = useState<Form>({
-    name: '',
-    email: '',
-    maritalStatus: '',
-    genre: ''
-  })
-  const validFields: string[] = []
+  const [formData, setFormData] = useState<Form>(initialFormData)
   const namedFormFields = ['name', 'email', 'maritalStatus', 'genre']
+  const validPercentage = calculateValidPercentage()
 
-  checkValidFields()
-
-  function checkValidFields() {
+  function calculateValidPercentage(): number {
+    let percentage = 0
+    const incrementAmount = 100 / namedFormFields.length
     for (const field of namedFormFields) {
       const isValid = Validator.valid(field, formData[field as keyof Form])
-      const isIncludes = validFields.includes(field)
       if (isValid) {
-        if (!isIncludes) {
-          validFields.push(field)
-        }
-      } else if (isIncludes) {
-        validFields.splice(validFields.indexOf(field), 1)
+        percentage += incrementAmount
       }
     }
+    return percentage
   }
-
-  const validPercentage = (validFields.length * 100) / namedFormFields.length
 
   function handleName(e: ChangeEvent<HTMLInputElement>) {
     setFormData((prev) => ({ ...prev, name: e.target.value }))
@@ -54,6 +50,11 @@ export function App() {
 
   function onSubmit() {
     alert('Form successfully submitted!')
+    clearFormFields()
+  }
+
+  function clearFormFields() {
+    setFormData(initialFormData)
   }
 
   return (
@@ -65,13 +66,12 @@ export function App() {
         <div className="w-full p-7 bg-white rounded-lg shadow-md">
           <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
             <div
+              hidden={validPercentage <= 0}
               className="bg-indigo-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
               style={{
                 width: `${validPercentage}%`
               }}>
-              <div className={validPercentage > 0 ? '' : 'invisible'}>
-                {validPercentage}%
-              </div>
+              {validPercentage}%
             </div>
           </div>
           <form>
@@ -136,8 +136,9 @@ export function App() {
                       type="radio"
                       name="genre"
                       id="masculine"
-                      value={formData.genre}
+                      value="Masculine"
                       onChange={(e) => handleGenre('Masculine')}
+                      checked={formData.genre.includes('Masculine')}
                     />
                     <label
                       className="form-check-label inline-block text-gray-800"
@@ -151,8 +152,9 @@ export function App() {
                       type="radio"
                       name="genre"
                       id="feminine"
-                      value={formData.genre}
+                      value="Feminine"
                       onChange={(e) => handleGenre('Feminine')}
+                      checked={formData.genre.includes('Feminine')}
                     />
                     <label
                       className="form-check-label inline-block text-gray-800"
