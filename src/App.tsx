@@ -17,7 +17,6 @@ export function App() {
   })
   const validFields: string[] = []
   const namedFormFields = ['name', 'email', 'maritalStatus', 'genre']
-  const validPercentage = (validFields.length * 100) / namedFormFields.length
 
   checkValidFields()
 
@@ -34,6 +33,8 @@ export function App() {
       }
     }
   }
+
+  const validPercentage = (validFields.length * 100) / namedFormFields.length
 
   function handleName(e: ChangeEvent<HTMLInputElement>) {
     setFormData((prev) => ({ ...prev, name: e.target.value }))

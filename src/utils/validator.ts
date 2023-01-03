@@ -3,7 +3,7 @@ type FieldRulesType = {
 }
 
 const fieldsRules: FieldRulesType = {
-  name: (value: string) => !!value && value.length >= 3,
+  name: (value: string) => !!value && /([a-zA-Z]+\s?\b){2,}/.test(value),
   email: (value: string) => !!value && /^(.+)@(.+)$/.test(value),
   maritalStatus: (value: string) => !!value,
   genre: (value: string) => !!value,
