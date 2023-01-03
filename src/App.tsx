@@ -17,10 +17,9 @@ export function App() {
   })
   const validFields: string[] = []
   const namedFormFields = ['name', 'email', 'maritalStatus', 'genre']
+  const validPercentage = (validFields.length * 100) / namedFormFields.length
 
   checkValidFields()
-
-  const validPercentage = (validFields.length * 100) / namedFormFields.length
 
   function checkValidFields() {
     for (const field of namedFormFields) {
